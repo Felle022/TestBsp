@@ -26,16 +26,28 @@ public class Runner {
 	dropTable(c,"Klasse");
 
 	Schueler.createTable(c, "Schueler");
-	Schueler.insertSchueler(c, "Marc", "Eggers", 38);
+	Schueler.insertSchueler(c, "Eggers", "Mark", 38);
 	Schueler.insertSchueler(c, "Ron", "Bielecki", 23);
 	Schueler.insertSchueler(c, "Nico", "Lazzo", 28);
+	Schueler.CSVInsert(c, "C:\\Users\\E5550\\Documents\\Schule\\3AHWII\\INFI\\CSV\\Kunden(NN,VV,Age).csv");
 	
 	Klasse.createTable(c, "Klasse");
 	Klasse.insertKlasse(c, "4Bier", 30);
-	Klasse.insertKlasse(c, "2H03", 23);
+	Klasse.insertKlasse(c, "2DP", 23);
+	Klasse.CSVInsert(c,"C:\\Users\\E5550\\Documents\\Schule\\3AHWII\\INFI\\CSV\\Klassen.csv" );
 	
 	SchuelerZuKlass.createTable(c, "SchuelerZuKlasse");
-	SchuelerZuKlass.insertInto(c, 1, 1);
+	SchuelerZuKlass.insertInto(c, "Ron", "Bielecki", 23, 1);
+	SchuelerZuKlass.insertInto(c, "Eggers", "Mark", 38,3);
+	SchuelerZuKlass.insertInto(c, "Eggers", "Mark", 38,4);
+	SchuelerZuKlass.insertInto(c, "Eggers", "Mark", 38,2);
+	
+	
+	Schueler.select(c, "Schueler");
+	System.out.println();
+	Klasse.select(c, "Klasse");
+	System.out.println();
+	SchuelerZuKlass.writeCSV(c,"C:\\Users\\E5550\\Documents\\Schule\\3AHWII\\INFI\\CSV\\SchuelerZuKlasse.csv");
 	
 	
 	}
