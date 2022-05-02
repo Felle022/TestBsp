@@ -2,12 +2,19 @@ package TestBspHueMysql;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 public class Schueler {
 
@@ -92,6 +99,93 @@ public class Schueler {
 			}
 			return  anzSp;
 	 }
+	
+	static void JsonInsert(Connection c, String url)
+	{
+		Scanner scanner;
+		try {
+			File f = new File(url);
+			scanner = new Scanner(f);
+			String data = "";
+			while (scanner.hasNextLine()) {
+				data = scanner.nextLine();
+				 
+				Object ob = new JSONParser().parse(data);
+				 
+				JSONObject js = (JSONObject) ob;
+				
+				String nachname = (String)js.get("Nachname");
+				String vorname = (String)js.get("Vorname");
+				long age = (long)js.get("age");
+				
+				
+				String sql = "insert into  Schueler  (vorname, nachname, age) values (?, ?, ?);";
+				
+				
+				PreparedStatement stmt = c.prepareStatement(sql);
+				stmt.setString(1, vorname);
+				stmt.setString(2, nachname);
+				stmt.setLong(3, age);
+				stmt.executeUpdate();
+				stmt.close();
+			}
+			scanner.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	static void JsonWrite(Connection c, String url)
+	{
+		try {
+			FileWriter fw = new FileWriter(url);
+		 
+		JSONObject json = new JSONObject();
+		String s = "";
+
+		
+		Statement stmt = c.createStatement();
+		
+		String sql = "select vorname, nachname, age from Schueler;";
+		
+		ResultSet rs = stmt.executeQuery(sql);
+
+		while (rs.next()) {
+			String nachname = rs.getString("Nachname");
+			String vorname = rs.getString("Vorname");
+			int age = rs.getInt("age");
+			
+			json.put("Nachname", nachname);
+			json.put("Vorname", vorname);
+			json.put("age", age);	
+			s = s + json;
+		
+		}
+		//System.out.println(s);
+		fw.write(s);
+		fw.flush();
+		fw.close();
+		rs.close();
+		stmt.close();
+		System.out.println("Datei wurde geschrieben");
+		}
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+	}
 	
 	static void select(Connection c,String tableName)
 	{

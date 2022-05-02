@@ -43,12 +43,13 @@ public class Runner {
 	SchuelerZuKlass.insertInto(c, "Eggers", "Mark", 38,2);
 	
 	
-	Schueler.select(c, "Schueler");
 	System.out.println();
 	Klasse.select(c, "Klasse");
 	System.out.println();
 	SchuelerZuKlass.writeCSV(c,"C:\\Users\\E5550\\Documents\\Schule\\3AHWII\\INFI\\CSV\\SchuelerZuKlasse.csv");
-	
+	Schueler.JsonInsert(c, "C:\\Users\\E5550\\eclipse-workspace\\ini\\src\\TestBspHueMysql\\Json.json");
+	Schueler.JsonWrite(c, "C:\\Users\\E5550\\Documents\\Schule\\3AHWII\\INFI\\Json\\Json.json");
+	Schueler.select(c, "Schueler");
 	
 	}
 	
